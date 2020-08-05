@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head" />
+
+<body id="page-top">
+	<div id="wrapper">
+		<div class="d-flex flex-column" id="content-wrapper">
+			<div id="content">
+				<nav th:replace="fragments :: navigation"></nav>
+				<div class="container-fluid"
+					style="padding-right: 4rem; padding-left: 4rem;">
+					<div
+						class="d-sm-flex justify-content-between align-items-center mb-4">
+						<h3 class="text-dark mb-0">Registrierungen</h3>
+					</div>
+					<div class="row">
+						<div class="col-6" th:each="regUser : ${users}">
+							<!-- Start: Basic Card -->
+							<div class="card shadow mb-4">
+								<div class="card-header py-3">
+									<h5
+										class="text-primary d-flex justify-content-between align-items-xl-center m-0 font-weight-bold"
+										th:text="${regUser.name}">
+										<i class="fa fa-remove"></i></a>
+									</h5>
+								</div>
+								<div class="card-body">
+									<p class="mb-3" th:text="'Benutzername: ' + ${regUser.login}"></p>
+									<p class="mb-3" th:text="'Email: ' + ${regUser.email}"></p>
+									<form id="formName" th:action="@{/users/accept}"
+										th:object="${regUser}" method="post" style="display: inline;">
+										<button type="submit" class="btn btn-sm btn-success m-1"
+											th:formaction="@{/users/accept/{login}(login=${regUser.login})}">Akzeptieren</button>
+										<button type="submit" class="btn btn-sm btn-danger m-1"
+											th:formaction="@{/users/deny/{login}(login=${regUser.login})}">Ablehnen</button>
+									</form>
+								</div>
+							</div>
+							<!-- End: Basic Card -->
+						</div>
+					</div>
+					<div class="spacer"></div>
+				</div>
+			</div>
+		</div>
+		<a class="border rounded d-inline scroll-to-top" href="#page-top"><i
+			class="fas fa-angle-up"></i></a>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head">
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>Agenda</title>
+<link rel="shortcut icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon" />
+<link rel="apple-touch-icon" href="/assets/img/favicons/apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="57x57" href="/assets/img/favicons/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicons/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicons/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicons/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon" sizes="120x120" href="/assets/img/favicons/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" sizes="144x144" href="/assets/img/favicons/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon" sizes="152x152" href="/assets/img/favicons/apple-touch-icon-152x152.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon-180x180.png" />
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Didact+Gothic">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="/assets/fonts/fontawesome-all.min.css">
+<link rel="stylesheet" href="/assets/fonts/font-awesome.min.css">
+<link rel="stylesheet"
+	href="/assets/fonts/fontawesome5-overrides.min.css">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/custom.css">
+<link rel='stylesheet prefetch'
+	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.standalone.min.css'>
+
+</head>
+
+<body>
+	<div th:fragment="navigation">
+		<nav
+			class="navbar navbar-dark navbar-expand bg-primary text-uppercase shadow topbar static-top mb-4">
+			<div class="container-fluid">
+				<button class="btn btn-link d-md-none rounded-circle mr-3"
+					id="sidebarToggleTop-1" type="button">
+					<i class="fas fa-bars"></i>
+				</button>
+				<a class="navbar-brand d-xl-flex align-items-xl-center"
+					href="/tasks"
+					style="font-family: Montserrat, sans-serif; margin-left: 16px; padding-left: 0px;"><img
+					src="/assets/img/Unbenannt-2.svg" height="26px" width="26px"
+					style="margin-right: .5rem;">Agenda</a>
+				<ul class="nav navbar-nav d-xl-flex justify-content-xl-center">
+					<li th:if="${user}" class="nav-item dropdown" id="li-task-dropdown"><a
+						class="dropdown-toggle nav-link nav-link active"
+						data-toggle="dropdown" aria-expanded="false" href="/tasks">TASKS<span
+							class="badge badge-secondary badge-counter"
+							style="margin-left: 0px; margin-top: -8px; font-size: 16px;"
+							th:text="${user.openTasks}"></span></a>
+						<div
+							class="dropdown-menu border rounded-0 shadow-lg dropdown-list dropdown-menu-right animated--grow-in"
+							role="menu">
+							<h6 class="dropdown-header">Statistik</h6>
+							<div></div>
+							<div
+								class="row no-gutters justify-content-center justify-content-xl-center"
+								style="width: 100%; padding-bottom: 1.5rem; padding-top: 1.5rem;">
+								<div
+									class="col-3 d-flex d-xl-flex justify-content-center justify-content-xl-center"
+									style="margin: auto;">
+									<h6
+										class="d-flex justify-content-center align-items-start align-self-center flex-wrap-reverse"
+										style="margin-top: 1rem; margin-right: 7px;">&nbsp;ALLE</h6>
+									<span class="badge badge-pill badge-info"
+										style="padding: 0.5rem; margin-top: 1rem; margin-bottom: 0.5rem;"
+										th:text="${user.allTasks}"></span>
+								</div>
+								<div
+									class="col-3 d-flex d-xl-flex justify-content-center justify-content-xl-center"
+									style="margin: auto;">
+									<h6
+										class="d-flex justify-content-center align-items-start align-self-center flex-wrap-reverse"
+										style="margin-top: 1rem; margin-right: 0.5rem;">&nbsp;OFFEN</h6>
+									<span class="badge badge-pill badge-warning"
+										style="padding: 0.5rem; margin-top: 1rem; margin-bottom: 0.5rem;"
+										th:text="${user.openTasks}"></span>
+								</div>
+								<div
+									class="col-3 d-flex d-xl-flex justify-content-center justify-content-xl-center"
+									style="margin: auto;">
+									<h6
+										class="d-flex justify-content-center align-items-start align-self-center flex-wrap-reverse"
+										style="margin-top: 1rem; margin-right: 0.5rem;">&nbsp;FERTIG</h6>
+									<span class="badge badge-pill badge-success flex-grow-1"
+										style="padding: 0.5rem; margin-top: 1rem; margin-bottom: 0.5rem;"
+										th:text="${user.completedTasks}"></span>
+								</div>
+							</div>
+							<a
+								class="text-center bg-light border rounded-0 shadow-sm dropdown-item small text-gray-500"
+								href="/tasks">Zeige Alle Tasks</a>
+						</div></li>
+					<li th:if="${user}" class="nav-item" role="presentation"><a
+						class="nav-link active" href="/topics">Topics</a></li>
+					<li th:if="${administration}" class="nav-item" role="presentation"><a
+						class="nav-link active" href="/users">Anwenderverwaltung</a></li>
+					<li class="nav-item" role="presentation"></li>
+					<li th:if="${user}" class="nav-item dropdown"><a
+						class="dropdown-toggle nav-link nav-link active"
+						data-toggle="dropdown" aria-expanded="false" href="/profile"><strong
+							th:text=${user.displayName}></strong></a>
+						<div class="dropdown-menu shadow" role="menu">
+							<a class="dropdown-item" role="presentation" href="/profile">PROFIL</a>
+							<form id="logoutform" th:if="${user}" th:action="@{/logout}"
+								method="post">
+								<button id="logoutbutton" class="dropdown-item" type="submit">LOGOUT</button>
+							</form>
+						</div></li>
+					<li role="presentation" th:unless="${user}"
+						class="nav-item d-xl-flex align-items-xl-center dropdown no-arrow mx-1"><a
+						class="btn btn-secondary" href="/login">Login</a></li>
+				</ul>
+				<button class="btn btn-link d-md-none rounded-circle mr-3"
+					id="sidebarToggleTop" type="button">
+					<i class="fas fa-bars"></i>
+				</button>
+			</div>
+		</nav>
+
+		<div th:if="${success!=null}"
+			class="alert alert-success alert-dismissible fade show" role="alert">
+			<strong>Yay!</strong> <span th:text="${success}"></span>
+			<button class="btn close" type="button" data-dismiss="alert">
+				<span>×<br></span>
+			</button>
+		</div>
+		<div th:if="${warning!=null}"
+			class="alert alert-warning alert-dismissible fade show" role="alert">
+			<strong>Hmm.</strong> <span th:text="${warning}"></span>
+			<button class="btn close" type="button" data-dismiss="alert">
+				<span>×<br></span>
+			</button>
+		</div>
+		<div th:if="${error!=null}"
+			class="alert alert-danger alert-dismissible fade show" role="alert">
+			<strong>Hmm.</strong> <span th:text="${error}"></span>
+			<button class="btn close" type="button" data-dismiss="alert">
+				<span>×<br></span>
+			</button>
+		</div>
+		<div th:if="${msg!=info}"
+			class="alert alert-info alert-dismissible fade show" role="alert">
+			<strong>Hmm.</strong> <span th:text="${info}"></span>
+			<button class="btn close" type="button" data-dismiss="alert">
+				<span>×<br></span>
+			</button>
+		</div>
+	</div>
+
+	<a class="border rounded d-inline scroll-to-top" href="#page-top"><i
+		class="fas fa-angle-up"></i></a>
+
+	<th:block th:fragment="scripts">
+		<!-- Optional JavaScript -->
+		<script src="/assets/js/jquery.min.js"></script>
+		<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"
+			crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+			crossorigin="anonymous"></script>
+		<script src="/assets/js/main.js"></script>
+		<script type="text/javascript">
+			function copyKey(key) {
+				navigator.clipboard.writeText(key);
+			}
+		</script>
+		<!-- JS Datei Bootstrap Datepicker -->
+		<script
+			src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js'></script>
+		<!-- JS Datei Bootstrap Sprache Deutsch, muss als zweites JS stehen -->
+		<script
+			src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.de.min.js'></script>
+
+		<!-- Datepicker Aufruf als letztes, bei Bedarf anpassen -->
+		<script>
+			$('#datepicker').datepicker({
+				format : 'dd.mm.yyyy',
+				startDate : '0',
+				todayHighlight : true,
+				autoclose : true,
+				language : 'de'
+			});
+		</script>
+	</th:block>
+</body>

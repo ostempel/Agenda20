@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head" />
+
+<body class="bg-gradient-primary">
+	<div class="container shadow"
+		style="font-family: 'Didact Gothic', sans-serif;">
+		<div class="card shadow-lg o-hidden border-0 my-5">
+			<div class="card-body p-0">
+				<div class="row justify-content-center" style="margin: -8px;">
+					<div class="col-lg-7">
+						<div class="p-5">
+							<div class="text-center">
+								<h1 class="text-uppercase text-dark mb-4" style="height: 33px;">Agenda</h1>
+								<hr>
+							</div>
+							<h4 class="text-uppercase text-center">Taskmanagement&nbsp;</h4>
+							
+							<div th:if="${error!=null}"
+								class="alert alert-danger alert-dismissible fade show"
+								role="alert">
+								<strong>Hmm.</strong> <span th:text="${error}"></span>
+								<button class="btn close" type="button" data-dismiss="alert">
+									<span>x<br></span>
+								</button>
+							</div>
+							
+							<form th:action="@{/registration}" method="post" class="user mt-1"
+								th:object="${userRegistration}">
+								<div class="form-group">
+									<input th:field="*{login}"
+										class="form-control form-control-user" autofocus="autofocus"
+										type="text" id="username" aria-describedby="emailHelp"
+										placeholder="Benutzername" name="username" required=""
+										minlength="4" maxlength="32" /> <small
+										class="form-text text-muted">* Benutzername muss
+										zwischen 4-32 Zeichen sein</small>
+
+								</div>
+								<div class="form-group">
+									<input th:field="*{name}"
+										class="form-control form-control-user" autofocus="autofocus"
+										type="text" id="name" aria-describedby="emailHelp"
+										placeholder="Name" name="name" required="" minlength="4"
+										maxlength="32" /> <small class="form-text text-muted">*
+										Name muss zwischen 4-32 Zeichen sein</small>
+								</div>
+								<div class="form-group">
+									<input th:field="*{password}"
+										class="form-control form-control-user" autofocus="autofocus"
+										type="password" id="password" aria-describedby="emailHelp"
+										placeholder="Passwort" name="password" required=""
+										minlength="8" maxlength="32" /> <small
+										class="form-text text-muted">* Das Passwort muss
+										mindestens ein Grobuchstaben, ein Kleinbuchstaben, eine Zahl
+										und ein Sonderzeichen enthalten! 8-32 Zeichen </small>
+								</div>
+								<div class="form-group">
+									<input th:field="*{matchingPassword}"
+										class="form-control form-control-user" autofocus="autofocus"
+										type="password" id="matichingPassword"
+										aria-describedby="emailHelp" placeholder="Wiederhole Passwort"
+										name="matchingPassword" required="" minlength="8"
+										maxlength="32" /> <small class="form-text text-muted">*
+										Wiederhole das Passwort</small>
+								</div>
+								<div class="form-group">
+									<input th:field="*{email}"
+										class="form-control form-control-user" autofocus="autofocus"
+										type="text" id="matichingPassword"
+										aria-describedby="emailHelp" placeholder="Email" name="email"
+										required="" minlength="7" maxlength="40" /> <small
+										class="form-text text-muted">* Gib eine Email ein!
+										7-40 Zeichen </small>
+								</div>
+								<button class="btn btn-primary btn-block text-white btn-user mt-1"
+									type="submit" name="submit" value="submit">Registrieren</button>
+							</form>
+							<a href="/"><button
+									class="btn btn-outline-primary btn-block btn-user mt-1"
+									type="submit" name="submit" value="submit">Zur Startseite</button></a>
+							<div class="text-center">
+								<p class="mb-5"></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<th:block th:replace="fragments :: scripts">
+</body>
+
+</html>

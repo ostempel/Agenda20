@@ -1,0 +1,89 @@
+/* remove rounding from cards, buttons and inputs */
+.card, .btn, .form-control {
+	border-radius: 0 !important;
+}
+
+html {
+	font-family: "Didact Gothic", sans-serif;
+}
+
+* {
+	font-family: "Montserrat";
+}
+
+.btn-success {
+	/*background-color: green;*/
+	background-image: linear-gradient(to bottom right, rgb(30, 159, 30),
+		rgb(3, 122, 3) 60%);
+}
+
+.btn.btn-primary {
+	background-image: linear-gradient(to bottom right, #4e73df, rgb(44, 80, 183)
+		60%);
+}
+
+.navbar.navbar-dark.navbar-expand.bg-primary.text-uppercase.shadow.topbar.static-top.mb-4
+	{
+	background-image: linear-gradient(to bottom left, #4e73df, rgb(42, 74, 166)
+		55%);
+}
+
+.btn.btn-secondary.btn-sm {
+	background-image: linear-gradient(to bottom right, rgb(182, 185, 203),
+		rgb(119, 121, 133) 90%);
+}
+
+.card-header.border.rounded-0.py-3 {
+	background-image: linear-gradient(to bottom left, rgb(170, 172, 188),
+		rgb(133, 135, 150) 90%);
+}
+
+.dropdown-header {
+	background-image: linear-gradient(to bottom right, #5176e0, rgb(44, 80, 183)
+		60%);
+}
+
+.btn.btn-outline-danger:hover {
+	background-image: linear-gradient(to bottom right, #e74a3b, #c53f32 60%);
+}
+
+.btn.btn-light:hover {
+	background-image: linear-gradient(to bottom right, rgb(170, 172, 188),
+		rgb(133, 135, 150) 90%);
+	color: #fff;
+}
+
+.btn:hover {
+	box-shadow: 0 1rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+}
+
+.shadow {
+	box-shadow: 0 1.3rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+}
+
+.card-header-gray-bg {
+	background-image: linear-gradient(to bottom left, rgb(170, 172, 188),
+		rgb(133, 135, 150) 90%) !important;
+	color: secondary;
+	border-radius: 0%;
+	opacity: 75%;
+}
+
+a, .btn {
+	cursor: pointer;
+	padding: 6px 12px;
+	font-size: 1rem !important;
+}
+
+#logoutbutton {
+	z-index: 1100;
+	cursor: pointer;
+}
+
+.collapse:not(.show ) {
+	display: none;
+} 
+
+form.user .btn-user {
+	padding: 6px 12px;
+}

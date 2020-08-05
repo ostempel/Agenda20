@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head" />
+
+<body id="page-top">
+	<div id="wrapper">
+		<div class="d-flex flex-column" id="content-wrapper">
+			<div id="content">
+				<nav th:replace="fragments :: navigation"></nav>
+				<div class="container-fluid"
+					style="padding-right: 4rem; padding-left: 4rem;">
+					<div
+						class="d-sm-flex justify-content-between align-items-center mb-4">
+						<h3 class="text-dark mb-0">Eigene Topics</h3>
+						<div class="d-flex">
+							<form style="display: flex;" th:object="${search}"
+								th:action="@{/topics}" method="get">
+
+								<div class="input-group">
+									<input th:field="*{search}"
+										class="form-control form-control" type="text"
+										placeholder="Topics durchsuchen" />
+									<div class="input-group-append">
+										<button class="btn btn-primary py-0" type="submit">
+											<i class="fas fa-search"></i>
+										</button>
+									</div>
+									<div class="input-group-append">
+										<a th:if="${param.search != null}" th:href="'/topics/'"
+											class="btn btn-outline-danger btn-sm ml-2"
+											data-toggle="tooltip" data-placement="top"
+											title="Suche zur&uuml;cksetzen"><i class="fa fa-undo"
+											aria-hidden="true"></i></a>
+									</div>
+								</div>
+							</form>
+
+							<button class="btn btn-primary btn-sm ml-2" data-toggle="modal"
+								data-target="#modal1" type="button">
+								<i class="fa fa-plus"></i>&nbsp; Topic erstellen
+							</button>
+
+						</div>
+					</div>
+					<div class="row d-xl-flex justify-content-xl-center">
+						<div
+							th:if="${#lists.size(managedTopics)==0 and param.search != null}"
+							role="alert" class="alert alert-danger text-center"
+							style="width: 100%;">
+							<span><strong
+								th:text="'Es wurden keine eigenen Topics zu deiner Suche nach ' + ${param.search} + ' gefunden!'">Keine
+									Topics gefunden</strong></span>
+						</div>
+					</div>
+					<div
+						th:if="${#lists.size(managedTopics)==0 and param.search == null}"
+						class="row d-xl-flex justify-content-xl-center">
+						<div role="alert" class="alert alert-danger text-center"
+							style="width: 100%;">
+							<span><strong>Du hast keine Topics erstellt!</strong></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-6" th:each="t : ${managedTopics}">
+							<!-- Start: Basic Card -->
+							<div class="card shadow mb-4">
+								<div class="card-header py-3">
+									<h4
+										class="text-nowrap text-primary d-flex align-items-xl-center m-0 font-weight-bold"
+										th:text="${t.title}">
+										<span class="text-secondary" style="font-size: 18px;"></span><br>
+									</h4>
+								</div>
+								<div class="card-body">
+									<strong th:text="'Schl&uuml;ssel: ' + ${t.key}">(%ABO-CODE%)</strong><a
+										th:data-key="${t.key}"
+										onclick="copyKey(this.getAttribute('data-key'));"
+										class="d-inline-flex badge badge-secondary badge-counter align-top"
+										style="margin-left: 0px; margin-right: -0.6rem; margin-top: -8px;"
+										data-toggle="tooltip" data-placement="top"
+										title="Schl&uuml;ssel in Zwischenablage kopieren"><i
+										class="far fa-copy" style="font-size: 12px;"></i></a><br> <br>
+
+									<p class="mb-3" th:text="${t.shortDescription}">Beschreibung</p>
+									<a class="btn btn-primary active mr-3" role="button"
+										th:href="'/topics/'+${t.uuid}+'/manage'">Verwalten</a>
+
+									<div th:if="${t.isSubscribed == false}"
+										style="display: inline;">
+										<a
+											class="btn btn-outline-danger border rounded-0 border-danger mr-3"
+											type="button" data-toggle="modal" data-target="#deleteModal"
+											th:attr="data-target='#deleteModal' + ${t.uuid}">L&#246;schen</a>
+										<!-- Delete Modal -->
+										<div class="modal fade shadow" th:id="deleteModal + ${t.uuid}"
+											tabindex="-1" role="dialog"
+											aria-labelledby="unsubscribeModalCenterTitle"
+											aria-hidden="true">
+											<div class="modal-dialog modal-dialog-centered"
+												role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="unsubscribeModalLongTitle"
+															th:text="${t.title} + ' l&#246;schen?'">Topic
+															l�schen?</h5>
+													</div>
+
+													<div class="modal-footer">
+														<form id="formName"
+															th:action="@{/topics/{uuid}/delete(uuid=${t.uuid})}"
+															method="post">
+
+															<button type="submit" class="btn btn-danger">Ja</button>
+															<a href="/" class="btn btn-light" data-dismiss="modal">Nein</a>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="card-footer">
+									<div class="row">
+										<div class="col">
+											<h5 th:text="'Abonnenten: ' + ${#lists.size(t.subscriber)}">Anzahl
+												Abonnenten</h5>
+										</div>
+										<div class="col">
+											<h5 th:text="'Anzahl Tasks: ' + ${t.countTasks}">Anzahl Tasks</h5>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- End: Basic Card -->
+						</div>
+					</div>
+					<div
+						class="d-flex d-sm-flex justify-content-between align-items-lg-center mb-4">
+						<h3 class="text-dark d-lg-flex mb-0">Abonnierte Topics</h3>
+
+						<div class="d-flex">
+							<button class="btn btn-primary btn-sm" data-toggle="modal"
+								data-target="#modal2" type="button" style="margin-left: .5rem;">
+								<i class="fa fa-plus"></i>&nbsp; Topic abonnieren
+							</button>
+						</div>
+					</div>
+					<div class="row d-xl-flex justify-content-xl-center">
+						<div th:if="${#lists.size(topics)==0 and param.search != null}"
+							role="alert" class="alert alert-danger text-center"
+							style="width: 100%;">
+							<span><strong
+								th:text="'Es wurden keine abonnierten Topics zu deiner Suche nach ' + ${param.search} + ' gefunden!'">Keine
+									Topics gefunden</strong></span>
+						</div>
+					</div>
+					<div th:if="${#lists.size(topics)==0 and param.search == null}"
+						class="row d-xl-flex justify-content-xl-center">
+						<div role="alert" class="alert alert-danger text-center"
+							style="width: 100%;">
+							<span><strong>Du hast keine Topics abonniert!</strong></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-4 col-lg-6 col-xl-4" th:each="t : ${topics}">
+							<!-- Start: Basic Card -->
+							<div class="card shadow mb-4">
+								<div class="card-header py-3">
+									<h4 class="text-primary m-0 font-weight-bold"
+										th:text="${t.title}"></h4>
+								</div>
+								<div class="card-body">
+									<h6 th:text="'Von '+${t.creator.displayName}"></h6>
+									<p class="mb-3" th:text="${t.shortDescription}"></p>
+									<a th:href="'/topics/'+${t.uuid}" class="btn btn-primary mr-3"
+										type="button">&Ouml;ffnen</a> <a
+										class="btn btn-outline-danger border rounded-0 border-danger mr-3"
+										type="button" data-toggle="modal"
+										data-target="#unsubscribeModal"
+										th:attr="data-target='#unsubscribeModal' + ${t.uuid}">Deabonnieren</a>
+									<!-- Unsubscribe Modal -->
+									<div class="modal fade shadow"
+										th:id="unsubscribeModal + ${t.uuid}" tabindex="-1"
+										role="dialog" aria-labelledby="unsubscribeModalCenterTitle"
+										aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered"
+											role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="unsubscribeModalLongTitle"
+														th:text="${t.title} + ' deabonnieren?'">Topic
+														deabonnieren?</h5>
+												</div>
+
+												<div class="modal-footer">
+													<form id="formName"
+														th:action="@{/topics/{uuid}/unsubscribe(uuid=${t.uuid})}"
+														method="post">
+
+														<button type="submit" class="btn btn-danger">Ja</button>
+														<a href="/" class="btn btn-light" data-dismiss="modal">Nein</a>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- End: Basic Card -->
+						</div>
+					</div>
+
+					<!-- Topic erstellen Modal -->
+					<div class="modal fade shadow" role="dialog" tabindex="-1"
+						id="modal1">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title">Neues Topic erstellen</h4>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">×</span>
+									</button>
+								</div>
+								<form th:action="@{/topics}" th:object="${newTopic}"
+									method="post">
+									<div class="modal-body">
+										<div class="form-group">
+											<input th:field="*{title}" class="form-control" type="text"
+												placeholder="Titel" minlength="10" maxlength="60"><small>Verwenden
+												Sie einen aussagekräftigen Titel, der aus mindestens 10
+												Zeichen besteht!</small>
+										</div>
+										<div class="form-group">
+											<input th:field="*{shortDescription}" class="form-control"
+												type="text" placeholder="Kurzbeschreibung" minlength="10"
+												maxlength="60"><small>Beschreiben Sie Ihren
+												Kurs in wenigen Worten!</small>
+										</div>
+										<div class="form-group">
+											<textarea th:field="*{longDescription}" class="form-control"
+												placeholder="Langbeschreibung" minlength="10"
+												maxlength="160"></textarea>
+											<small>Beschreiben Sie Ihren Kurs ausführlich!</small>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button class="btn btn-light" type="button"
+											data-dismiss="modal">Abbrechen</button>
+										<button class="btn btn-primary" type="submit">Erstellen</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+					<!-- Topic abonnieren Modal -->
+					<div class="modal fade" role="dialog" tabindex="-1" id="modal2">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title">Topic abonnieren</h4>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">×</span>
+									</button>
+								</div>
+								<form th:action="@{/topics/key/register}" method="post">
+									<div class="modal-body">
+										<div class="form-group">
+											<input class="form-control" type="text"
+												placeholder="Schlüssel" name="key"><small>Sie
+												erhalten einen Schlüssel vom Kursleiter!</small>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button class="btn btn-light" type="button"
+											data-dismiss="modal">Abbrechen</button>
+										<button class="btn btn-primary" type="submit">Beitreten</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="spacer"></div>
+				</div>
+			</div>
+		</div>
+		<a class="border rounded d-inline scroll-to-top" href="#page-top"><i
+			class="fas fa-angle-up"></i></a>
+	</div>
+	<th:block th:replace="fragments :: scripts">
+</body>
+
+</html>

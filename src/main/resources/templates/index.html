@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head" />
+
+<body class="bg-gradient-primary">
+	<div class="container shadow"
+		style="font-family: 'Didact Gothic', sans-serif;">
+		<div class="card shadow-lg o-hidden border-0 my-5">
+			<div class="card-body p-0">
+				<div class="row justify-content-center"
+					style="margin: -8px; height: 30rem;">
+					<div class="col-lg-7">
+						<div class="p-5">
+							<div class="text-center">
+								<h1 class="text-uppercase text-dark mb-4" style="height: 33px;">Agenda</h1>
+								<hr />
+							</div>
+							<h4 class="text-uppercase text-center">Taskmanagement</h4>
+							<p class="text-center"></p>
+							<a href="/login"><button
+									class="btn btn-primary btn-block text-white btn-user"
+									type="submit" name="submit" value="submit"
+									style="margin-top: 5.5rem;">Zum Login</button></a> <br /> <a
+								href="/registration"><button
+									class="btn btn-outline-primary btn-block btn-user"
+									type="submit" name="submit" value="submit">Zur Registrierung</button></a>
+							<div class="text-center">
+								<p class="mb-5"></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<th:block th:replace="fragments :: scripts">
+</html>

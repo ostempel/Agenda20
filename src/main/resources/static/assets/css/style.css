@@ -1,0 +1,58 @@
+.navbar-brand {
+  padding-left: 1%;
+  font-family: Montserrat, sans-serif;
+  font-weight: bold;
+}
+
+.nav.navbar-nav.navnav {
+  color: black!important;
+}
+
+.d-none.d-lg-inline.mr-2.small {
+  color: #ffffff;
+}
+
+.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
+  height: 100%;
+}
+
+.spacer {
+  height: 90vh;
+}
+
+#new-topic {
+  color: white;
+}
+
+#brand-logo {
+  font-size: 34px;
+}
+
+#app-navbar {
+  background: linear-gradient(120deg, #00e4d0, #5983e8);
+}
+
+.btn-taskview {
+  width: 170px;
+  color: #fff;
+}
+
+.create-task {
+  width: 50%;
+}
+
+.create-task input {
+  /*border: 2px solid red;*/
+}
+
+#task-close {
+  cursor: pointer;
+}
+
+#app-navbar {
+  background: linear-gradient(120deg, #00e4d0, #5983e8);
+}
+
+#brand-logo {
+  font-size: 34px;
+}

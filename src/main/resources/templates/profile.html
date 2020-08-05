@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head" />
+
+<body id="page-top">
+	<div id="wrapper">
+		<div class="d-flex flex-column" id="content-wrapper">
+			<div id="content">
+				<nav th:replace="fragments :: navigation"></nav>
+				<div class="container-fluid"
+					style="padding-right: 4rem; padding-left: 4rem;">
+					<h3 class="text-dark mb-4">Profil</h3>
+					<div class="row d-flex justify-content-center mb-3">
+						<div class="col-10">
+							<div class="card shadow mb-3">
+								<div class="card-header py-3">
+									<p class="text-primary m-0 font-weight-bold">Nutzerinformationen</p>
+								</div>
+								<div class="card-body">
+									<form th:action="@{/user/updateUserinfo}" th:object="${user1}"
+										method="post">
+										<div class="form-row">
+											<div class="col">
+												<div class="form-group">
+													<label for="username"><strong>Login</strong></label><input
+														th:field="*{login}" class="form-control" type="text"
+														name="username" disabled="" readonly="" required>
+													<small>Benutzername (nicht ver&#228;nderbar)</small>
+												</div>
+											</div>
+
+											<div class="col">
+												<div class="form-group">
+													<label for="username"><strong>Name</strong><br></label><input
+														th:field="*{name}" class="form-control" type="text"
+														minLength="4" maxLength="32" required> <small>Anzeigename,
+														bestehend aus 4-32 Zeichen</small>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-row">
+											<div class="col">
+												<div class="form-group">
+													<label for="email"><strong>E-Mail-Adresse</strong></label><input
+														class="form-control" type="email" th:field="*{email}">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<button class="btn btn-primary btn-sm" type="submit">Speichern</button>
+										</div>
+									</form>
+									<form th:action="@{/user/updatePassword}" method="post">
+										<div class="form-row">
+											<div class="col">
+												<div class="form-group">
+													<label><strong>Altes Passwort</strong></label><input
+														name="oldPassword" class="form-control" type="password"
+														placeholder="Altes Passwort">
+												</div>
+											</div>
+										</div>
+										<div class="form-row">
+											<div class="col">
+												<div class="form-group">
+													<label><strong>Neues Passwort</strong></label><input
+														name="newPassword" class="form-control" type="password"
+														placeholder="Neues Passwort" minLength="8" maxLength="32">
+													<small>Passwort, bestehend aus mindestens 8
+														Zeichen, darunter Gro&szlig;-/Kleinbuchstaben, Ziffer(n)
+														und Sonderzeichen</small>
+												</div>
+
+											</div>
+											<div class="col">
+												<div class="form-group">
+													<label><strong>Neues Passwort
+															best&#228;tigen</strong></label><input name="newPassword2"
+														class="form-control" type="password"
+														placeholder="Neues Passwort" minLength="8" maxLength="32">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<button class="btn btn-primary btn-sm" type="submit">Passwort
+												&#228;ndern</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="spacer"></div>
+				</div>
+			</div>
+		</div>
+		<a class="border rounded d-inline scroll-to-top" href="#page-top"><i
+			class="fas fa-angle-up"></i></a>
+	</div>
+	<th:block th:replace="fragments :: scripts">
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head" />
+
+<body id="page-top">
+	<div id="wrapper">
+		<div class="d-flex flex-column" id="content-wrapper">
+			<div id="content">
+				<nav th:replace="fragments :: navigation"></nav>
+				<div class="container-fluid"
+					style="padding-right: 4rem; padding-left: 4rem;">
+					<div
+						class="d-sm-flex justify-content-between align-items-center mb-4">
+						<h3 class="text-dark mb-0">
+							Aufgabenübersicht für Topic:&nbsp;<strong
+								th:text="${topic.title}"></strong>
+						</h3>
+					</div>
+					<div class="w-75 mb-4">
+						<h5>
+							<strong> Kurzbeschreibung</strong>
+						</h5>
+						<p th:text="${topic.shortDescription}"></p>
+						<br />
+						<h5>
+							<strong>Langbeschreibung</strong>
+						</h5>
+						<p th:text="${topic.longDescription}"></p>
+						<br />
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-xl-4" th:each="t : ${tasks}">
+							<!-- Start: Basic Card -->
+							<div class="card shadow mb-4">
+								<div class="card-header py-3"
+									th:classappend="${t.status.status.toString()=='FERTIG'} ? card-header-gray-bg">
+									<div class="row">
+										<div class="col d-xl-flex align-items-xl-center">
+											<h5 class="text-primary m-0 font-weight-bold"
+												th:text="${t.title}"
+												th:classappend="${t.status.status.toString()=='FERTIG'} ? text-light : text-primary"></h5>
+										</div>
+										<div th:unless="${t.status.status.toString()=='FERTIG'}"
+											class="col-auto d-flex">
+											<form id="formName"
+												th:action="@{/tasks/{id}/check(id=${t.id})}"
+												th:object="${t}" method="post">
+												<button
+													class="btn btn-success btn-sm border rounded-0 border-success"
+													type="submit"
+													style="margin: 0px; margin-right: 1rem; margin-left: 1rem;"
+													title="Als erledigt markieren">
+													<i class="fa fa-check-square-o"></i>
+												</button>
+											</form>
+										</div>
+										<div th:if="${t.status.status.toString()=='FERTIG'}"
+											class="col-auto">
+											<form id="formName"
+												th:action="@{/tasks/{id}/reset(id=${t.id})}"
+												th:object="${t}" method="post">
+												<button class="btn btn-outline-danger bg-light btn-sm"
+													type="submit"
+													style="margin: 0px; margin-right: 1rem; margin-left: 1rem;"
+													title="Task reaktivieren">
+													<i class="fa fa-repeat"></i>
+												</button>
+											</form>
+										</div>
+									</div>
+								</div>
+								<div class="card-body">
+									<p class="m-0" th:text="${t.shortDescription}"></p>
+									<p>
+										Zu erledigen bis: <strong th:text="' ' + ${t.deadline}"></strong>
+									</p>
+									<div class="row">
+										<div class="col">
+											<a th:href="'/tasks/'+${t.id}"><button
+													class="btn btn-primary mt-3 mr-5 ml-auto btn-taskview"
+													type="submit" style="width: 170px;">&Ouml;ffnen</button></a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- End: Basic Card -->
+						</div>
+					</div>
+					<div th:if="${#lists.size(tasks)==0}"
+						class="row d-xl-flex justify-content-xl-center">
+						<div role="alert" class="alert alert-info text-center"
+							style="width: 100%;">
+							<span><strong>Es gibt aktuell keine Tasks zu
+									diesem Topic!</strong></span>
+						</div>
+					</div>
+					<div class="spacer"></div>
+				</div>
+			</div>
+		</div>
+		<a class="border rounded d-inline scroll-to-top" href="#page-top"><i
+			class="fas fa-angle-up"></i></a>
+	</div>
+	<th:block th:replace="fragments :: scripts">
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head" />
+<body id="page-top">
+	<div id="wrapper">
+		<div class="d-flex flex-column" id="content-wrapper">
+			<div id="content">
+				<nav th:replace="fragments :: navigation"></nav>
+				<div class="container-fluid"
+					style="padding-right: 4rem; padding-left: 4rem;">
+					<div
+						class="d-sm-flex justify-content-between align-items-center justify-content-lg-start mb-4">
+						<h2 class="text-dark mb-0" th:text="${task.title}"></h2>
+						<form th:unless="${task.status.status.toString()=='FERTIG'}"
+							id="formName" th:action="@{/tasks/{id}/check(id=${task.id})}"
+							th:object="${task}" method="post">
+							<button
+								class="btn btn-success btn-sm border rounded-0 border-success"
+								type="submit"
+								style="margin: 0px; margin-right: 1rem; margin-left: 1rem;"
+								title="Als erledigt markieren">
+								<i class="fa fa-check-square-o"></i>
+							</button>
+						</form>
+						<form th:if="${task.status.status.toString()=='FERTIG'}"
+							id="formName" th:action="@{/tasks/{id}/reset(id=${task.id})}"
+							th:object="${task}" method="post">
+							<button class="btn btn-outline-danger btn-sm ml-2" type="submit"
+								style="margin: 0px; margin-right: 1rem; margin-left: 1rem;"
+								title="Task reaktivieren">
+								<i class="fa fa-undo"></i>
+							</button>
+						</form>
+					</div>
+					<div class="w-75 mb-4">
+						<h5 th:text="${task.shortDescription}"></h5>
+						<p th:text="${task.longDescription}"></p>
+						<p>
+							Zu erledigen bis: <strong th:text="${task.deadline}"></strong>
+						</p>
+					</div>
+					<div
+						class="d-sm-flex justify-content-between align-items-center mb-4">
+						<h3 class="text-dark mb-0">Kommentar</h3>
+					</div>
+					<div th:if="${comment.comment == ''}"
+						class="row d-xl-flex justify-content-xl-center">
+						<div role="alert" class="alert alert-info text-center"
+							style="width: 100%;">
+							<span><strong>Du hast bisher keinen Kommentar zu diesem Task verfasst!</strong></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<h5 th:text="${comment.comment}"></h5>
+						</div>
+					</div>
+					<div style="margin-top: 1rem;">
+						<a class="btn btn-primary" data-toggle="collapse"
+							aria-expanded="false" aria-controls="collapse-1"
+							href="#collapse-1" role="button"><i class="fa fa-edit"></i>&nbsp;Kommentar
+							bearbeiten</a>
+						<div class="collapse" id="collapse-1">
+							<div class="card" style="margin-top: 1rem;">
+								<div class="card-body">
+									<h4 class="text-muted card-subtitle mb-2">Hier Kommentar
+										eingeben</h4>
+									<form th:action="@{/tasks/{id}/commit(id=${task.id})}"
+										th:object="${comment}" method="post">
+										<textarea class="form-control" th:field="${comment.comment}"
+											placeholder="" maxlength="250"></textarea>
+										<button class="btn btn-primary mt-3" type="submit">
+											Speichern</button>
+									</form>
+								</div>
+							</div>
+							<div class="card w-50 mt-5 d-none" id="comment"></div>
+						</div>
+					</div>
+					<div class="spacer"></div>
+				</div>
+			</div>
+		</div>
+		<a class="border rounded d-inline scroll-to-top" href="#page-top"><i
+			class="fas fa-angle-up"></i></a>
+	</div>
+	<th:block th:replace="fragments :: scripts">
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head" />
+<script>
+	function updateSearch() {
+		var form = document.getElementById("form-id");
+		form.submit();
+	}
+</script>
+<body id="page-top">
+	<div id="wrapper">
+		<div class="d-flex flex-column" id="content-wrapper">
+			<div id="content">
+				<nav th:replace="fragments :: navigation"></nav>
+				<div class="container-fluid"
+					style="padding-right: 4rem; padding-left: 4rem;">
+					<div
+						class="d-flex d-sm-flex justify-content-between align-items-lg-center mb-4">
+						<h3 class="text-dark d-lg-flex mb-0">Meine Tasks</h3>
+						<div class="d-flex">
+							<form style="display: flex;" th:object="${search}"
+								th:action="@{/tasks}" method="get">
+								<div class="dropdown d-lg-flex" style="margin-right: 1rem;">
+									<button
+										class="btn btn-primary btn-sm dropdown-toggle d-lg-flex align-items-lg-center"
+										data-toggle="dropdown" aria-expanded="false" type="button"
+										style="margin-left: 0.5rem;">
+										<i class="fa fa-filter" style="margin-right: 0.5rem;"></i>Tasks
+										filtern
+									</button>
+									<div class="dropdown-menu shadow-lg" role="menu">
+										<div role="group"
+											class="btn-group-vertical btn-group-sm d-flex d-xl-flex justify-content-center align-items-xl-center"
+											style="width: 100%;">
+											<label class="btn btn-outline-primary" type="button"
+												style="width: 80%; margin-bottom: 0.5rem;"> Alle <input
+												type="radio" name="options" id="option1"
+												onclick="this.form.submit();" value="ALLE"
+												th:field="*{searchType}" />
+											</label><label class="btn btn-outline-primary" type="button"
+												style="width: 80%; margin-bottom: 0.5rem;"> Offen <input
+												type="radio" name="options" id="option2"
+												onclick="this.form.submit();" value="OFFEN"
+												th:field="*{searchType}" />
+											</label><label class="btn btn-outline-primary" type="button"
+												style="width: 80%; margin-bottom: 0.5rem;"> Fertig <input
+												type="radio" name="options" id="option3"
+												onclick="this.form.submit();" value="FERTIG"
+												th:field="*{searchType}" />
+											</label>
+										</div>
+									</div>
+								</div>
+
+								<div class="input-group">
+									<input th:field="*{search}" class="form-control form-control"
+										type="text" placeholder="Tasks durchsuchen" />
+									<div class="input-group-append">
+										<button class="btn btn-primary py-0" type="submit">
+											<i class="fas fa-search"></i>
+										</button>
+									</div>
+									<div class="input-group-append">
+										<a th:if="${param.search != null}" th:href="'/tasks/'"
+											class="btn btn-outline-danger btn-sm ml-2"
+											data-toggle="tooltip" data-placement="top"
+											title="Suche zur&uuml;cksetzen"><i class="fa fa-undo"
+											aria-hidden="true"></i></a>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="row d-xl-flex justify-content-xl-center">
+						<div th:if="${#lists.size(tasks)==0 and param.search != null}"
+							role="alert" class="alert alert-danger text-center"
+							style="width: 100%;">
+							<span><strong
+								th:text="${#strings.toString(param.searchType) == 'ALLE'} ? 'Es wurden keine Tasks zu Deiner Suche nach ' + ${param.search} + ' gefunden!' : 'Es wurden keine Tasks zu Deinen Filtereinstellungen gefunden!'">Keine
+									Tasks gefunden</strong></span>
+						</div>
+					</div>
+					<div th:if="${#lists.size(tasks)==0 and param.search == null}"
+						class="row d-xl-flex justify-content-xl-center">
+						<div role="alert" class="alert alert-danger text-center"
+							style="width: 100%;">
+							<span><strong>Du hast keine Tasks!</strong></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-xl-4" th:each="t : ${tasks}">
+							<!-- Start: Basic Card -->
+							<div class="card shadow mb-4">
+								<div class="card-header py-3"
+									th:classappend="${t.status.status.toString()=='FERTIG'} ? card-header-gray-bg">
+									<div class="row">
+										<div class="col d-xl-flex align-items-xl-center">
+											<h5 class="text-primary m-0 font-weight-bold"
+												th:text="${t.title}"
+												th:classappend="${t.status.status.toString()=='FERTIG'} ? text-light : text-primary"></h5>
+										</div>
+										<div th:unless="${t.status.status.toString()=='FERTIG'}"
+											class="col-auto d-flex">
+											<form id="formName"
+												th:action="@{/tasks/{id}/check(id=${t.id})}"
+												th:object="${t}" method="post">
+												<button
+													class="btn btn-success btn-sm border rounded-0 border-success"
+													type="submit"
+													style="margin: 0px; margin-right: 1rem; margin-left: 1rem;"
+													title="Als erledigt markieren">
+													<i class="fa fa-check-square-o"></i>
+												</button>
+											</form>
+										</div>
+										<div th:if="${t.status.status.toString()=='FERTIG'}"
+											class="col-auto">
+											<form id="formName"
+												th:action="@{/tasks/{id}/reset(id=${t.id})}"
+												th:object="${t}" method="post">
+												<button class="btn btn-outline-danger bg-light btn-sm"
+													type="submit"
+													style="margin: 0px; margin-right: 1rem; margin-left: 1rem;"
+													title="Task reaktivieren">
+													<i class="fa fa-undo"></i>
+												</button>
+											</form>
+										</div>
+									</div>
+								</div>
+								<div class="card-body">
+									<h5 th:text="'In Topic: '+${t.topic.title}"></h5>
+									<p class="m-0" th:text="${t.shortDescription}"></p>
+									<p>
+										Zu erledigen bis: <strong th:text="' ' + ${t.deadline}"></strong>
+									</p>
+									<div class="row">
+										<div class="col">
+											<a th:href="'/tasks/'+${t.id}"><button
+													class="btn btn-primary mt-3 mr-5 ml-auto btn-taskview"
+													type="submit" style="width: 170px;">&Ouml;ffnen</button></a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- End: Basic Card -->
+						</div>
+					</div>
+					<div class="spacer"></div>
+				</div>
+			</div>
+		</div>
+		<a class="border rounded d-inline scroll-to-top" href="#page-top"><i
+			class="fas fa-angle-up"></i></a>
+	</div>
+	<th:block th:replace="fragments :: scripts">
+</body>
+</html>

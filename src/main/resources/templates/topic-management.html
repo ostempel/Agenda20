@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head" />
+
+<body id="page-top">
+	<div id="wrapper">
+		<div class="d-flex flex-column" id="content-wrapper">
+			<div id="content">
+				<nav th:replace="fragments :: navigation"></nav>
+				<div class="container-fluid"
+					style="padding-right: 4rem; padding-left: 4rem;">
+					<div
+						class="d-sm-flex justify-content-between align-items-center mb-4">
+						<!-- <h3 class="text-dark mb-0" th:text="${topic.title}">%Topic
+							Name%</h3> -->
+						<h3 class="text-dark d-xl-flex align-items-xl-center mb-0">
+							Verwaltungsansicht für das Topic:&nbsp;<strong
+								th:text="${topic.title}"></strong>
+						</h3>
+
+						<div class="col text-right">
+							<!-- Start: Basic Modal Button -->
+							<button class="btn btn-primary" data-toggle="modal"
+								data-target="#modal2" type="button">
+								<i class="fa fa-pencil-square-o"></i>&nbsp; Topic bearbeiten
+							</button>
+							<!-- End: Basic Modal Button -->
+
+							<button class="btn btn-primary" data-toggle="modal"
+								data-target="#modal1" type="button">
+								<i class="fa fa-plus"></i>&nbsp; Task erstellen
+							</button>
+						</div>
+					</div>
+					<div class="w-75 mb-4">
+						<h5>
+							<strong>Kurzbeschreibung</strong>
+						</h5>
+						<p th:text="${topic.shortDescription}"></p>
+						<br />
+						<h5>
+							<strong>Langbeschreibung</strong>
+						</h5>
+						<p th:text="${topic.longDescription}"></p>
+						<br />
+					</div>
+					<div
+						class="d-sm-flex justify-content-between align-items-center mb-4"
+						style="margin-top: 2rem;">
+
+						<h3 class="text-dark mb-0">Abonnenten</h3>
+					</div>
+					<div>
+						<a th:unless="${#lists.size(subscribers) == 0}"
+							class="btn btn-primary" data-toggle="collapse"
+							aria-expanded="false" aria-controls="collapse-1"
+							href="#collapse-1" role="button">Abonnenten anzeigen</a>
+						<div class="collapse" id="collapse-1">
+							<div class="d-flex justify-content-center"
+								style="margin-top: 2rem; margin-bottom: 2rem;">
+								<div class="card shadow-lg" style="width: 75%;">
+									<div class="card-header py-3">
+										<p class="text-primary m-0 font-weight-bold">Abonnenten</p>
+									</div>
+									<div class="card-body">
+										<div class="table-responsive table mt-2" id="dataTable"
+											role="grid" aria-describedby="dataTable_info">
+											<table class="table table-striped table-hover dataTable my-0"
+												id="dataTable">
+												<thead>
+													<tr>
+														<th colspan="1">Name</th>
+														<th colspan="3">Abgeschlossene Tasks</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr th:each="subscriber : ${subscribers}">
+														<td th:text="${subscriber.name} " />
+														<td th:text="${subscriber.completedTasks} " />
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div th:if="${#lists.size(subscribers) == 0}">
+						<div class="row d-xl-flex justify-content-xl-center">
+							<div role="alert" class="alert alert-info text-center"
+								style="width: 100%;">
+								<span><strong>Bisher hat noch keiner dein Topic
+										abonniert!</strong></span>
+							</div>
+						</div>
+					</div>
+					<div
+						class="d-sm-flex justify-content-between align-items-center mb-4"
+						style="margin-top: 2rem;">
+
+						<h3 class="text-dark mb-0">Tasks</h3>
+					</div>
+					<div>
+						<div th:if="${#lists.size(tasks)==0}"
+							class="row d-xl-flex justify-content-xl-center">
+							<div role="alert" class="alert alert-info text-center"
+								style="width: 100%;">
+								<span><strong>Es gibt aktuell keine Tasks zu
+										diesem Topic!</strong></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6" th:each="task : ${tasks}">
+								<!-- Start: Basic Card -->
+								<div class="card shadow mb-4">
+									<div class="card-header py-3">
+										<h5
+											class="text-primary d-flex justify-content-between align-items-xl-center m-0 font-weight-bold"
+											th:text="${task.title}">
+											<a class=" btn
+										btn-outline-danger btn-sm ml-5"
+												role="button" href="/task.html"> <i class="fa fa-remove"></i></a>
+										</h5>
+									</div>
+									<div class="card-body">
+										<p class="mb-3" th:text="${task.shortDescription}"></p>
+										<p>
+											Zu erledigen bis: <strong th:text="${task.deadline}"></strong>
+										</p>
+										<a class="btn btn-primary active" role="button"
+											th:href="'/tasks/'+${task.id}+'/manage'">Verwalten</a>
+
+
+										<div style="display: inline;">
+											<a
+												class="btn btn-outline-danger border rounded-0 border-danger mr-3"
+												type="button" data-toggle="modal" data-target="#deleteModal"
+												th:attr="data-target='#deleteModal' + ${task.id}">L&#246;schen</a>
+											<!-- Delete Modal -->
+											<div class="modal fade shadow"
+												th:id="deleteModal + ${task.id}" tabindex="-1" role="dialog"
+												aria-labelledby="unsubscribeModalCenterTitle"
+												aria-hidden="true">
+												<div class="modal-dialog modal-dialog-centered"
+													role="document">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="unsubscribeModalLongTitle"
+																th:text="${task.title} + ' l&#246;schen?'">Task
+																l�schen?</h5>
+														</div>
+
+														<div class="modal-footer">
+															<form id="formName"
+																th:action="'/tasks/'+${task.id}+'/delete/'"
+																method="post">
+
+																<button type="submit" class="btn btn-danger">Ja</button>
+																<a href="/" class="btn btn-light" data-dismiss="modal">Nein</a>
+															</form>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
+									<div class="card-footer">
+										<h5
+											th:text="${task.countDoneUser == 1} ? 'Von ' + ${task.countDoneUser} + ' Anwender abgeschlossen' : 'Von ' + ${task.countDoneUser} + ' Anwendern abgeschlossen'"></h5>
+									</div>
+								</div>
+								<!-- End: Basic Card -->
+							</div>
+						</div>
+
+						<div class="modal fade" role="dialog" tabindex="-1" id="modal1">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h4 class="modal-title">Neuen Task erstellen</h4>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">×</span>
+										</button>
+									</div>
+									<form
+										th:action="@{/topics/{uuid}/createTask(uuid=${topic.uuid})}"
+										method="post">
+										<div class="modal-body">
+											<div class="form-group">
+												<input class="form-control" type="text" placeholder="Titel"
+													name="title"><small>Verwenden einen
+													aussagekräftigen Titel, der aus mindestens 10 Zeichen
+													besteht!</small>
+											</div>
+											<div class="form-group">
+												<input class="form-control" type="text"
+													placeholder="Kurzbeschreibung" name="shortDescription"><small>Beschreiben
+													den Task in wenigen Worten!</small>
+											</div>
+											<div class="form-group">
+												<textarea class="form-control"
+													placeholder="Langbeschreibung" name="longDescription"></textarea>
+												<small>Beschreibe den Task ausführlich!</small>
+											</div>
+											<div class="form-group">
+												<div class="input-group date">
+													<input type="text" class="form-control" id="datepicker"
+														placeholder="Deadline" name="deadline">
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-light" type="button"
+												data-dismiss="modal">Abbrechen</button>
+											<button class="btn btn-primary" type="submit">Erstellen</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+
+						<div class="modal fade" role="dialog" tabindex="-1" id="modal2">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h4 class="modal-title">Topic bearbeiten</h4>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">×</span>
+										</button>
+									</div>
+									<form th:action="@{/topics/{uuid}/manage(uuid=${topic.uuid})}"
+										th:object="${topic}" method="post">
+										<div class="modal-body">
+											<div class="form-group">
+												<input class="form-control" type="text" th:field="*{title}"
+													disabled="" readonly=""><small> Titel
+													(nicht veränderbar)</small>
+											</div>
+											<div class="form-group">
+												<input class="form-control" type="text"
+													th:field="*{shortDescription}" minLength="10"
+													maxLength="60"><small>Kurzbeschreibung für
+													das Topic (10-60 Zeichen)</small>
+											</div>
+											<div class="form-group">
+												<textarea class="form-control" th:field="*{longDescription}"
+													minLength="10" maxLength="160"></textarea>
+												<small>Ausführliche Langbeschreibung für das Topic
+													(10-160 Zeichen)</small>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-light" type="button"
+												data-dismiss="modal">Abbrechen</button>
+											<button class="btn btn-primary" type="submit">Speichern</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="spacer"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<th:block th:replace="fragments :: scripts">
+</body>
+
+</html>
